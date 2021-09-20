@@ -7,7 +7,6 @@
 
 // Renvoi true si l'ip est valide
 function isValidIp(ip) {
-    console.log(ip);
     return true;
 }
 
