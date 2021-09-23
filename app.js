@@ -2,8 +2,62 @@
 
 /**
  * @author Auversack Damien
- * @date 20-09-2021
+ * @date 23-09-2021
 */
+
+function question1() {
+    let tmp = document.getElementsByClassName("inputTextQ1");
+    let ip = tmp[0].value;
+    let classe = classOfIpClassfull(ip);
+    let nbNetwork = nbNetworkOfClass(classe);
+    let nbHost = nbHostOfClass(classe);
+    let reponse = "Classe : "+classe+", Network : "+nbNetwork+", Host : "+nbHost;
+    console.log("Question 1 : "+reponse);
+}
+// manque  Si une découpe
+// en sous-réseau est réalisée, le programme doit déterminer l’adresse de SR
+function question2() {
+    let tmp = document.getElementsByClassName("inputTextQ2");
+    let ip = tmp[0].value;
+    let mask = tmp[1].value;
+
+    let networkAddress=findNetwork(ip,mask);
+    let networkString = networkAddress.join('.')
+    let broadcastAddress=findBroadcast(ip,mask);
+    let broadcastString = broadcastAddress.join('.')
+
+    let reponse="Adresse de réseau : "+networkString+", Adresse de broadcast : "+broadcastString;
+
+    console.log("Question 2 : "+reponse);
+}
+function question3() {
+    let tmp = document.getElementsByClassName("inputTextQ3");
+    let ip = tmp[0].value;
+    let masque = tmp[1].value;
+    let adresseReseau = tmp[2].value;
+    let reponse="";
+
+    console.log("Question 3 : "+reponse);
+}
+function question4() {
+    let tmp = document.getElementsByClassName("inputTextQ4");
+    let ip = tmp[0].value;
+    let masque = tmp[1].value;
+    let adresseReseau = tmp[2].value;
+    let reponse="";
+
+    console.log("Question 4 : "+reponse);
+}
+function question5() {
+    let tmp = document.getElementsByClassName("inputTextQ5");
+    let ip1 = tmp[0].value;
+    let masque1 = tmp[1].value;
+    let ip2 = tmp[2].value;
+    let masque2 = tmp[3].value;
+    let reponse="";
+
+    console.log("Question 5 : "+reponse);
+}
 
 // Renvoi true si l'ip est valide
 function isValidIp(ip) {
@@ -60,19 +114,12 @@ function nbHostOfClass(classLetter) {
 
 // 2. Détermine l’adresse de réseau et l’adresse de broadcast du réseau
 //      Si il y a un sous-réseau, déterminer son adresse
-function findNetworkAndBroadcast(ip, mask) {
-    const ipArray = ip.split('.');
-    const maskArray = mask.split('.');
-    let ipArrayBinary=[];
-    let maskArrayBinary=[];
-    for (let i in ipArray) {
-        ipArrayBinary.push(parseInt(ipArray[i], 10).toString(2).padStart(8, "0"))
-    }
-    for (let i in maskArray) {
-        maskArrayBinary.push(parseInt(maskArray[i], 10).toString(2).padStart(8, "0"))
-    }
+function findNetwork(ip, mask) {
+    return andOperationIpMask(ip, mask, false);
+}
 
-    return [ipArrayBinary, maskArrayBinary];
+function findBroadcast(ip, mask) {
+    return andOperationIpMask(ip, mask, true);
 }
 
 // 3. Détermine si l’IP appartient au réseau ou pas
@@ -90,7 +137,59 @@ function isSameNetwork(net1, mask1, net2, mask2) {
     return true; // maybe 2 boolean to return
 }
 
-console.log(classOfIpClassfull("192.168.1.34"));
-console.log(nbNetworkOfClass("C"));
-console.log(nbHostOfClass("C"));
-console.log(findNetworkAndBroadcast("192.168.1.1","255.255.255.0"));
+function convertDecimalToBinary(ipOrMask, isAnArray) {
+    let ipOrMaskArray;
+    if(!isAnArray){
+        ipOrMaskArray = convertToArray(ipOrMask);
+    } else {
+        ipOrMaskArray = ipOrMask;
+    }
+    let ipOrMaskArrayBinary=[];
+    for (let i in ipOrMaskArray) {
+        ipOrMaskArrayBinary.push(parseInt(ipOrMaskArray[i], 10).toString(2).padStart(8, "0"));
+    }
+    return ipOrMaskArrayBinary;
+}
+
+function convertBinaryToDecimal(ipOrMask, isAnArray) {
+    let ipOrMaskArray;
+    if(!isAnArray){
+        ipOrMaskArray = convertToArray(ipOrMask);
+    } else {
+        ipOrMaskArray = ipOrMask;
+    }
+
+    let ipOrMaskArrayBinary=[];
+    for (let i in ipOrMaskArray) {
+        ipOrMaskArrayBinary.push(parseInt(ipOrMaskArray[i], 2).toString(10));
+    }
+    return ipOrMaskArrayBinary;
+}
+
+function convertToArray(ipOrMask) {
+    const ipOrMaskArray = ipOrMask.split('.');
+    let ipOrMaskArrayBinary=[];
+    for (let i in ipOrMaskArray) {
+        ipOrMaskArrayBinary.push(parseInt(ipOrMaskArray[i]))
+    }
+    return ipOrMaskArrayBinary;
+}
+
+function andOperationIpMask(ip, mask,isForBroadcast) {
+    let ipBinary = convertDecimalToBinary(ip, false);
+    let maskBinary = convertDecimalToBinary(mask, false);
+
+    let ipOfNetwork;
+    let ipOfNetworkArray = [];
+
+    for(let i in ipBinary) {
+        ipOfNetwork = "";
+        for (let j in ipBinary[i]) {
+            let tmpIp = ipBinary[i][j];
+            let tmpMask = maskBinary[i][j];
+            ipOfNetwork += (isForBroadcast && tmpMask==='0') ? 1 : parseInt(tmpIp)&&parseInt(tmpMask);
+        }
+        ipOfNetworkArray.push(ipOfNetwork);
+    }
+    return convertBinaryToDecimal(ipOfNetworkArray, true);
+}

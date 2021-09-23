@@ -11,22 +11,37 @@
 
     <h1>Labo TCP-IP</h1>
 
-    <ul>
-        <li>
-            <a href=""></a>
-        </li>
-        <li>
-            <a href=""></a>
-        </li>
-        <li>
-            <a href=""></a>
-        </li>
-        <li>
-            <a href=""></a>
-        </li>
-    </ul>
+    <h2>
+        1. Détermine la classe à laquelle appartient une adresse IP si on travaille en mode classfull,
+        le nombre de réseaux que peut fournir un réseau de cette classe,
+        le nombre d’hôtes que peut fournir un réseau de cette classe
+    </h2>
+    <label>Adresse IP : <input class="inputTextQ1" type="text"> <button onclick="question1()">Valider</button></label>
+
+    <h2>
+        2. Détermine l’adresse de réseau et l’adresse de broadcast du réseau,
+        Si il y a un sous-réseau, déterminer son adresse
+    </h2>
+    <label>Adresse IP : <input  class="inputTextQ2" type="text"></label>
+    <label>Masque : <input class="inputTextQ2" type="text"> <button onclick="question2()">Valider</button></label>
+
+    <h2>3. Détermine si l’IP peut être attribuées aux machines de ce réseau</h2>
+    <label>Adresse IP : <input class="inputTextQ3" type="text"></label>
+    <label>Masque : <input class="inputTextQ3" type="text"></label>
+    <label>Adresse de réseau : <input class="inputTextQ3" type="text"> <button onclick="question3()">Valider</button></label>
+
+    <h2>4. Détermine si l’IP peut être attribuées aux machines de ce réseau</h2>
+    <label>Adresse IP : <input class="inputTextQ4" type="text"></label>
+    <label>Masque : <input class="inputTextQ4" type="text"></label>
+    <label>Adresse de réseau : <input class="inputTextQ4" type="text"> <button onclick="question4()">Valider</button></label>
+
+    <h2>5. Détermine si chaque machine considère l’autre comme faisant partie de son réseau ou pas</h2>
+    <label>Adresse IP 1 : <input class="inputTextQ5" type="text"></label>
+    <label>Masque 1 : <input class="inputTextQ5" type="text"></label>
+    <br/>
+    <label>Adresse IP 2 : <input class="inputTextQ5" type="text"></label>
+    <label>Masque 2 : <input class="inputTextQ5" type="text"> <button onclick="question5()">Valider</button></label>
 
     <script src="./app.js"></script>
-
 </body>
 </html>
