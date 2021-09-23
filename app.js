@@ -21,12 +21,10 @@ function question2() {
     let ip = tmp[0].value;
     let mask = tmp[1].value;
 
-    let networkAddress=findNetwork(ip,mask);
-    let networkString = networkAddress.join('.')
-    let broadcastAddress=findBroadcast(ip,mask);
-    let broadcastString = broadcastAddress.join('.')
+    let networkAddress=findNetwork(ip,mask).join('.');
+    let broadcastAddress=findBroadcast(ip,mask).join('.');
 
-    let reponse="Adresse de réseau : "+networkString+", Adresse de broadcast : "+broadcastString;
+    let reponse="Adresse de réseau : "+networkAddress+", Adresse de broadcast : "+broadcastAddress;
 
     console.log("Question 2 : "+reponse);
 }
@@ -71,9 +69,8 @@ function isValidMask() {
 
 // 1. Détermine la classe à laquelle appartient une adresse IP si on travaille en mode classfull
 function classOfIpClassfull(ip) {
-    if(!isValidIp(ip)) {
-        return "Incorrect";
-    }
+    if(!isValidIp(ip)) return "Incorrect";
+
     const ipArray = ip.split('.');
     let firstByteBinary = parseInt(ipArray[0], 10).toString(2).padStart(8, "0");
     for (let i = 0; i < 4; i++) {
@@ -138,12 +135,7 @@ function isSameNetwork(net1, mask1, net2, mask2) {
 }
 
 function convertDecimalToBinary(ipOrMask, isAnArray) {
-    let ipOrMaskArray;
-    if(!isAnArray){
-        ipOrMaskArray = convertToArray(ipOrMask);
-    } else {
-        ipOrMaskArray = ipOrMask;
-    }
+    let ipOrMaskArray = (!isAnArray) ? convertToArray(ipOrMask) : ipOrMask;
     let ipOrMaskArrayBinary=[];
     for (let i in ipOrMaskArray) {
         ipOrMaskArrayBinary.push(parseInt(ipOrMaskArray[i], 10).toString(2).padStart(8, "0"));
@@ -152,12 +144,7 @@ function convertDecimalToBinary(ipOrMask, isAnArray) {
 }
 
 function convertBinaryToDecimal(ipOrMask, isAnArray) {
-    let ipOrMaskArray;
-    if(!isAnArray){
-        ipOrMaskArray = convertToArray(ipOrMask);
-    } else {
-        ipOrMaskArray = ipOrMask;
-    }
+    let ipOrMaskArray=(!isAnArray) ? convertToArray(ipOrMask) : ipOrMask;
 
     let ipOrMaskArrayBinary=[];
     for (let i in ipOrMaskArray) {
