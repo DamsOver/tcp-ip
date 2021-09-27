@@ -2,12 +2,13 @@
 
 /**
  * @author Auversack Damien
- * @date 23-09-2021
+ * @date 27-09-2021
 */
 
 function question1() {
     let tmp = document.getElementsByClassName("inputTextQ1");
     let ip = tmp[0].value;
+    if(!isValidIp(ip)){console.log("Invalide IP !");return;}
     let classe = classOfIpClassfull(ip);
     let nbNetwork = nbNetworkOfClass(classe);
     let nbHost = nbHostOfClass(classe);
@@ -20,6 +21,9 @@ function question2() {
     let tmp = document.getElementsByClassName("inputTextQ2");
     let ip = tmp[0].value;
     let mask = tmp[1].value;
+    if(mask.charAt(0)==='/') {
+        mask = convertCidrToClassicMask(mask);
+    }
 
     let networkAddress=findNetwork(ip,mask).join('.');
     let broadcastAddress=findBroadcast(ip,mask).join('.');
@@ -59,17 +63,24 @@ function question5() {
 
 // Renvoi true si l'ip est valide
 function isValidIp(ip) {
-    return true;
+    let regex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    return regex.test(ip);
 }
-
+// 192.168.1.1
 // Renvoi true si le masque est valide
-function isValidMask() {
-    return true;
+function isValidMask(mask) {
+    let regex;
+    if(mask.charAt(0)==='/') {
+        mask = mask.replace(/^\//, "");
+        regex = /^([1-9]|[1-2][0-9]|3[0-2])$/;
+    } else {
+        regex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    }
+    return regex.test(mask);
 }
 
 // 1. Détermine la classe à laquelle appartient une adresse IP si on travaille en mode classfull
 function classOfIpClassfull(ip) {
-    if(!isValidIp(ip)) return "Incorrect";
 
     const ipArray = ip.split('.');
     let firstByteBinary = parseInt(ipArray[0], 10).toString(2).padStart(8, "0");
@@ -135,7 +146,7 @@ function isSameNetwork(net1, mask1, net2, mask2) {
 }
 
 function convertDecimalToBinary(ipOrMask, isAnArray) {
-    let ipOrMaskArray = (!isAnArray) ? convertToArray(ipOrMask) : ipOrMask;
+    let ipOrMaskArray = (!isAnArray) ? convertIpStringToIpArray(ipOrMask) : ipOrMask;
     let ipOrMaskArrayBinary=[];
     for (let i in ipOrMaskArray) {
         ipOrMaskArrayBinary.push(parseInt(ipOrMaskArray[i], 10).toString(2).padStart(8, "0"));
@@ -144,22 +155,42 @@ function convertDecimalToBinary(ipOrMask, isAnArray) {
 }
 
 function convertBinaryToDecimal(ipOrMask, isAnArray) {
-    let ipOrMaskArray=(!isAnArray) ? convertToArray(ipOrMask) : ipOrMask;
+    let ipOrMaskArray=(!isAnArray) ? convertIpStringToIpArray(ipOrMask) : ipOrMask;
 
-    let ipOrMaskArrayBinary=[];
+    let ipOrMaskArrayDecimal=[];
     for (let i in ipOrMaskArray) {
-        ipOrMaskArrayBinary.push(parseInt(ipOrMaskArray[i], 2).toString(10));
+        ipOrMaskArrayDecimal.push(parseInt(ipOrMaskArray[i], 2).toString(10));
     }
-    return ipOrMaskArrayBinary;
+    return ipOrMaskArrayDecimal;
 }
 
-function convertToArray(ipOrMask) {
+function convertIpStringToIpArray(ipOrMask) {
     const ipOrMaskArray = ipOrMask.split('.');
     let ipOrMaskArrayBinary=[];
     for (let i in ipOrMaskArray) {
         ipOrMaskArrayBinary.push(parseInt(ipOrMaskArray[i]))
     }
     return ipOrMaskArrayBinary;
+}
+
+function convertIpArrayToIpString(array) {
+    return array.join('.');
+}
+
+function convertCidrToClassicMask(maskCidr) {
+    maskCidr = maskCidr.replace(/^\//, "");
+    let tmpMask = '';
+    for (let i = 0; i < maskCidr; i++) {
+        tmpMask += '1';
+    }
+    tmpMask = tmpMask.padEnd(32, "0");
+    let octets=[];
+    for (let i = 0; i < 4; i++) {
+        octets.push(tmpMask.slice(0,8));
+        tmpMask = tmpMask.substring(8,32);
+    }
+
+    return convertIpArrayToIpString( convertBinaryToDecimal(octets,true) );
 }
 
 function andOperationIpMask(ip, mask,isForBroadcast) {
