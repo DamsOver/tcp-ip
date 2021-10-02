@@ -1,17 +1,18 @@
-// Renvoi true si l'ip est valide
+let regexIP = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+
 function isValidIp(ip) {
-    let regex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    return regex.test(ip);
+    return regexIP.test(ip);
 }
-// 192.168.1.1
-// Renvoi true si le masque est valide
 function isValidMask(mask) {
     let regex;
-    if(mask.charAt(0)==='/') {
+    if(isCidrMask(mask)) {
         mask = mask.replace(/^\//, "");
         regex = /^([1-9]|[1-2][0-9]|3[0-2])$/;
     } else {
-        regex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+        regex = regexIP;
     }
     return regex.test(mask);
+}
+function isCidrMask(mask) {
+    return mask.charAt(0)==='/';
 }

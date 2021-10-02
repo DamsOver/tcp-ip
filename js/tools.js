@@ -1,6 +1,5 @@
 // 1. Détermine la classe à laquelle appartient une adresse IP si on travaille en mode classfull
 function classOfIpClassfull(ip) {
-
     const ipArray = ip.split('.');
     let firstByteBinary = parseInt(ipArray[0], 10).toString(2).padStart(8, "0");
     for (let i = 0; i < 4; i++) {
@@ -40,17 +39,36 @@ function nbHostOfClass(classLetter) {
 }
 
 // 2. Détermine l’adresse de réseau et l’adresse de broadcast du réseau
-//      Si il y a un sous-réseau, déterminer son adresse
 function findNetwork(ip, mask) {
-    return andOperationIpMask(ip, mask, false);
+    return andOrOperationIpMask(ip, mask, true);
+}
+function findBroadcast(ip, mask) {
+    let invertedMask = reverseMask(mask);
+    invertedMask = convertIpBinaryToDecimal(invertedMask);
+    invertedMask = convertIpArrayToString(invertedMask);
+    return andOrOperationIpMask(ip, invertedMask, false);
 }
 
-function findBroadcast(ip, mask) {
-    return andOperationIpMask(ip, mask, true);
+function reverseMask(mask) {
+    let maskArray = convertIpDecimalToBinary(mask);
+    maskArray = convertIpArrayToString(maskArray).replace(/\./g, '');
+    let tmpArray = [];
+    for (let i = 0; i < maskArray.length; i++) {
+        tmpArray.push( (maskArray[i]===0 || maskArray[i]==='0') >>> 0);
+    }
+    return splitStringIntoPartOfNCharacter(tmpArray.join(''),8);
+}
+
+//Si il y a un sous-réseau, déterminer son adresse
+function isThereSubnetwork() {
+ return true;
+}
+function findSubnetwork(ip, mask) {
+    return "";
 }
 
 // 3. Détermine si l’IP appartient au réseau ou pas
-function isIpPartOfSubNet(ip, mask, network) {
+function isIpPartOfSubnetwork(ip, mask, network) {
     return true;
 }
 
@@ -64,21 +82,12 @@ function isSameNetwork(net1, mask1, net2, mask2) {
     return true; // maybe 2 boolean to return
 }
 
-function andOperationIpMask(ip, mask,isForBroadcast) {
-    let ipBinary = convertDecimalToBinary(ip, false);
-    let maskBinary = convertDecimalToBinary(mask, false);
-
-    let ipOfNetwork;
-    let ipOfNetworkArray = [];
-
-    for(let i in ipBinary) {
-        ipOfNetwork = "";
-        for (let j in ipBinary[i]) {
-            let tmpIp = ipBinary[i][j];
-            let tmpMask = maskBinary[i][j];
-            ipOfNetwork += (isForBroadcast && tmpMask==='0') ? 1 : parseInt(tmpIp)&&parseInt(tmpMask);
-        }
-        ipOfNetworkArray.push(ipOfNetwork);
+function andOrOperationIpMask(ip, mask, isAndOperation) {
+    let ipArray = (!Array.isArray(ip)) ? convertIpStringToArray(ip) : ip;
+    let maskArray = (!Array.isArray(mask)) ? convertIpStringToArray(mask) : mask;
+    let tmpArray = [];
+    for (let i = 0; i < ipArray.length; i++) {
+        tmpArray.push( (isAndOperation) ? (ipArray[i]&maskArray[i]).toString() : (ipArray[i]|maskArray[i]).toString() );
     }
-    return convertBinaryToDecimal(ipOfNetworkArray, true);
+    return tmpArray;
 }

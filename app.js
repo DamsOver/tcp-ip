@@ -2,7 +2,7 @@
 
 /**
  * @author Auversack Damien
- * @date 27-09-2021
+ * @date 02-10-2021
 */
 
 function question1() {
@@ -22,7 +22,7 @@ function question2() {
     let ip = tmp[0].value;
     let mask = tmp[1].value;
     if(mask.charAt(0)==='/') {
-        mask = convertCidrToClassicMask(mask);
+        mask = convertMaskCidrToClassic(mask);
     }
 
     let networkAddress=findNetwork(ip,mask).join('.');
