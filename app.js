@@ -65,8 +65,16 @@ class Mask {
     setMask(mask) {
         this.maskAddress = Mask.isCidrMask(mask) ? Mask.convertMaskCidrToClassic(mask) : mask;
     }
-    isValidMask() {
-        let mask = this.maskAddress;
+    reverseMask() {
+        let maskArray = Network.convertIpMaskDecimalToBinary(this.maskAddress);
+        maskArray = Network.convertIpMaskArrayToString(maskArray).replace(/\./g, '');
+        let tmpArray = [];
+        for (let i = 0; i < maskArray.length; i++) {
+            tmpArray.push( (maskArray[i]===0 || maskArray[i]==='0') >>> 0);
+        }
+        return Network.convertIpMaskBinaryToDecimal( Network.splitStringIntoPartOfNCharacter(tmpArray.join(''),8) );
+    }
+    static isValidMask(mask) {
         let regex;
         if(Mask.isCidrMask()) {
             mask = mask.replace(/^\//, "");
@@ -78,15 +86,6 @@ class Mask {
     }
     static isCidrMask(mask) {
         return mask.charAt(0)==='/';
-    }
-    reverseMask() {
-        let maskArray = Network.convertIpMaskDecimalToBinary(this.maskAddress);
-        maskArray = Network.convertIpMaskArrayToString(maskArray).replace(/\./g, '');
-        let tmpArray = [];
-        for (let i = 0; i < maskArray.length; i++) {
-            tmpArray.push( (maskArray[i]===0 || maskArray[i]==='0') >>> 0);
-        }
-        return Network.convertIpMaskBinaryToDecimal( Network.splitStringIntoPartOfNCharacter(tmpArray.join(''),8) );
     }
     static convertMaskCidrToClassic(maskCidr) {
         maskCidr = maskCidr.replace(/^\//, "");
