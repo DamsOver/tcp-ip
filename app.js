@@ -63,7 +63,7 @@ class Mask {
         this.setMask(mask);
     }
     setMask(mask) {
-        this.maskAddress = mask;
+        this.maskAddress = Mask.isCidrMask(mask) ? Mask.convertMaskCidrToClassic(mask) : mask;
     }
     isValidMask() {
         let mask = this.maskAddress;
@@ -76,8 +76,8 @@ class Mask {
         }
         return regex.test(mask);
     }
-    isCidrMask() {
-        return this.maskAddress.charAt(0)==='/';
+    static isCidrMask(mask) {
+        return mask.charAt(0)==='/';
     }
     reverseMask() {
         let maskArray = Network.convertIpMaskDecimalToBinary(this.maskAddress);
@@ -88,15 +88,13 @@ class Mask {
         }
         return Network.convertIpMaskBinaryToDecimal( Network.splitStringIntoPartOfNCharacter(tmpArray.join(''),8) );
     }
-    convertMaskCidrToClassic() {
-        let maskCidr = this.maskAddress;
+    static convertMaskCidrToClassic(maskCidr) {
         maskCidr = maskCidr.replace(/^\//, "");
         let tmpMask = ''.padStart(maskCidr, "1").padEnd(32, "0");
         let maskClassic = Network.splitStringIntoPartOfNCharacter(tmpMask,8);
         return Network.convertIpMaskArrayToString( Network.convertIpMaskBinaryToDecimal(maskClassic) );
     }
-    convertMaskClassicToCidr() {
-        let maskClassic = this.maskAddress;
+    static convertMaskClassicToCidr(maskClassic) {
         let MaskArray = (!Array.isArray(maskClassic)) ? Network.convertIpMaskStringToArray(maskClassic) : maskClassic;
         let cidr = 0;
         for(let i in MaskArray) {
@@ -133,6 +131,14 @@ class Network {
         }
 
         return tmpArray;
+    }
+    // 5. Détermine si chaque machine considère l’autre comme faisant partie de son réseau ou pas.
+    isSameNetwork(network2) {
+        let network1 = new Network(this.ip.ipAddress,this.mask.maskAddress);
+        if(network1.getNetworkAddress() !== network2.getNetworkAddress()) {
+            return false;
+        }
+        return true;
     }
     static convertIpMaskDecimalToBinary(ipOrMask) {
         let ipOrMaskArray = (!Array.isArray(ipOrMask)) ? Network.convertIpMaskStringToArray(ipOrMask) : ipOrMask;
@@ -190,10 +196,6 @@ function question2() {
 
     let network = new Network(ip,mask);
 
-    if(network.mask.isCidrMask()) {
-        network.mask.setMask( network.mask.convertMaskCidrToClassic() );
-    }
-
     let networkAddress = network.getNetworkAddress();
     let broadcastAddress = network.getBroadcastAddress();
 
@@ -225,7 +227,11 @@ function question5() {
     let mask1 = ipMaskInputTxt[1].value;
     let ip2 = ipMaskInputTxt[2].value;
     let mask2 = ipMaskInputTxt[3].value;
-    let reponse="";
+
+    let network1 = new Network(ip1,mask1);
+    let network2 = new Network(ip2,mask2);
+
+    let reponse=(network1.isSameNetwork(network2))?"Les 2 réseaux sont identiques":"Les 2 réseaux sont différents";
 
     console.log("Question 5 : "+reponse);
 }
@@ -244,8 +250,4 @@ function isIpPartOfSubnetwork(ip, mask, network) {
 // 4. Détermine si l’IP peut être attribuées aux machines de ce réseau
 function isAvailableIp(ip, mask, network) {
     return true;
-}
-// 5. Détermine si chaque machine considère l’autre comme faisant partie de son réseau ou pas.
-function isSameNetwork(net1, mask1, net2, mask2) {
-    return true; // maybe 2 boolean to return
 }
