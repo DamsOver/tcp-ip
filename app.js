@@ -6,21 +6,17 @@
  */
 
 let regexIP = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-
 class Ip {
     ipAddress;
-
     constructor(ip) {
         this.setIp(ip);
     }
     setIp(ip) {
         this.ipAddress = ip;
     }
-
     isValidIp() {
         return regexIP.test(this.ipAddress);
     }
-
     getClassOfIpClassfull() {
         const ipArray = this.ipAddress.split('.');
         let firstByteBinary = parseInt(ipArray[0], 10).toString(2).padStart(8, "0");
@@ -59,7 +55,6 @@ class Ip {
             default: return -3;
         }
     }
-
 }
 
 class Mask {
