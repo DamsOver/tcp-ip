@@ -68,7 +68,7 @@ class Mask {
     isValidMask() {
         let mask = this.maskAddress;
         let regex;
-        if(this.isCidrMask()) {
+        if(Mask.isCidrMask()) {
             mask = mask.replace(/^\//, "");
             regex = /^([1-9]|[1-2][0-9]|3[0-2])$/;
         } else {
@@ -135,10 +135,7 @@ class Network {
     // 5. Détermine si chaque machine considère l’autre comme faisant partie de son réseau ou pas.
     isSameNetwork(network2) {
         let network1 = new Network(this.ip.ipAddress,this.mask.maskAddress);
-        if(network1.getNetworkAddress() !== network2.getNetworkAddress()) {
-            return false;
-        }
-        return true;
+        return network1.getNetworkAddress() === network2.getNetworkAddress();
     }
     static convertIpMaskDecimalToBinary(ipOrMask) {
         let ipOrMaskArray = (!Array.isArray(ipOrMask)) ? Network.convertIpMaskStringToArray(ipOrMask) : ipOrMask;
