@@ -88,13 +88,15 @@ class Mask {
         }
         return Network.convertIpMaskBinaryToDecimal( Network.splitStringIntoPartOfNCharacter(tmpArray.join(''),8) );
     }
-    static convertMaskCidrToClassic(maskCidr) {
+    convertMaskCidrToClassic() {
+        let maskCidr = this.maskAddress;
         maskCidr = maskCidr.replace(/^\//, "");
         let tmpMask = ''.padStart(maskCidr, "1").padEnd(32, "0");
         let maskClassic = Network.splitStringIntoPartOfNCharacter(tmpMask,8);
         return Network.convertIpMaskArrayToString( Network.convertIpMaskBinaryToDecimal(maskClassic) );
     }
-    static convertMaskClassicToCidr(maskClassic) {
+    convertMaskClassicToCidr() {
+        let maskClassic = this.maskAddress;
         let MaskArray = (!Array.isArray(maskClassic)) ? Network.convertIpMaskStringToArray(maskClassic) : maskClassic;
         let cidr = 0;
         for(let i in MaskArray) {
@@ -189,7 +191,7 @@ function question2() {
     let network = new Network(ip,mask);
 
     if(network.mask.isCidrMask()) {
-        network.mask.setMask( Mask.convertMaskCidrToClassic(network.mask.maskAddress) );
+        network.mask.setMask( network.mask.convertMaskCidrToClassic() );
     }
 
     let networkAddress = network.getNetworkAddress();
