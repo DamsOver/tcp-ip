@@ -11,16 +11,17 @@
 </head>
 <body>
 
-    <h1 class="topTitle">Labo TCP-IP</h1>
+    <h1 class="topTitle rounded">Labo TCP-IP</h1>
     <div class="menu ">
-        <button type="button" class="btn btn-dark btn-main">f1</button>
-        <button type="button" class="btn btn-dark btn-main">f2</button>
-        <button type="button" class="btn btn-dark btn-main">f3</button>
-        <button type="button" class="btn btn-dark btn-main">f4</button>
-        <button type="button" class="btn btn-dark btn-main">f5</button>
+        <button type="button" class="btn btn-main">f1</button>
+        <button type="button" class="btn btn-main">f2</button>
+        <button type="button" class="btn btn-main">f3</button>
+        <button type="button" class="btn btn-main">f4</button>
+        <button type="button" class="btn btn-main">f5</button>
     </div>
 
-    <div class="card text-white bg-dark mb-3 shadow p-3 mb-5 rounded">
+    <!--Question 1-->
+    <div class="card titleCardColor mb-3 p-3 mb-5 rounded">
         <div class="card-body">
             <h2 class="card-text">
                 1. Détermine la classe à laquelle appartient une adresse IP si on travaille en mode classfull,
@@ -29,18 +30,19 @@
             </h2>
         </div>
     </div>
+
     <form>
         <div class="form-group">
             <label for="inputQ1Id">Adresse IP</label>
             <input type="text" class="form-control inputQ1" id="inputQ1Id" placeholder="Entrez l'adresse IP">
             <small id="inputQ1Help" class="form-text text-muted">Exemple d'adresse : 192.168.16.134</small>
         </div>
-        <button type="button" class="btn btn-primary" onclick="question1()">Valider</button>
+        <button type="button" class="btn btn-valider" onclick="question1()">Valider</button>
     </form>
-    <!--<label>Adresse IP : <input class="inputQ1" type="text"> <button onclick="question1()">Valider</button></label>-->
     <div class="card answerQ1 alert"></div>
 
-    <div class="card text-white bg-dark mb-3 shadow p-3 mb-5 rounded">
+    <!--Question 2-->
+    <div class="card titleCardColor mb-3 p-3 mb-5 rounded">
         <div class="card-body">
             <h2 class="card-text">
             2. Détermine l’adresse de réseau et l’adresse de broadcast du réseau,
@@ -51,28 +53,28 @@
 
     <form>
         <div class="row">
-        <div class="form-group col">
-            <label for="inputQ2Id">Adresse IP</label>
-            <input type="text" class="form-control inputQ2" id="inputQ2Id" placeholder="Entrez l'adresse IP">
-            <small id="inputQ2Help" class="form-text text-muted">Exemple d'adresse : 192.168.16.134</small>
-        </div>
-        <div class="form-group col">
-            <label for="inputQ2Id2">Masque</label>
-            <input type="text" class="form-control inputQ2" id="inputQ2Id2" placeholder="Entrez le masque">
-            <small id="inputQ2Help2" class="form-text text-muted">Exemple de masque : 255.255.255.0 ou /24</small>
-        </div>
+            <div class="form-group col">
+                <label for="inputQ2Id">Adresse IP</label>
+                <input type="text" class="form-control inputQ2" id="inputQ2Id" placeholder="Entrez l'adresse IP">
+                <small id="inputQ2Help" class="form-text text-muted">Exemple d'adresse : 192.168.16.134</small>
+            </div>
+            <div class="form-group col">
+                <label for="inputQ2Id2">Masque</label>
+                <input type="text" class="form-control inputQ2" id="inputQ2Id2" placeholder="Entrez le masque">
+                <small id="inputQ2Help2" class="form-text text-muted">Exemple de masque : 255.255.255.0 ou /24</small>
+            </div>
+
         </div>
         <div class="form-group form-check">
             <input type="checkbox" class="form-check-input inputQ2" id="inputQ2Id3">
             <label class="form-check-label" for="inputQ2Id3">Classful</label>
         </div>
-        <button type="button" class="btn btn-primary" onclick="question2()">Valider</button>
+        <button type="button" class="btn btn-valider" onclick="question2()">Valider</button>
     </form>
-    <!--<label>Adresse IP : <input  class="inputQ2" type="text"></label>
-    <label>Masque : <input class="inputQ2" type="text"> Classful<input class="inputQ2" type="checkbox"> <button onclick="question2()">Valider</button></label>-->
     <div class="card answerQ2 alert"></div>
 
-    <div class="card text-white bg-dark mb-3 mb-3 shadow p-3 mb-5 rounded">
+    <!--Question 3-->
+    <div class="card titleCardColor mb-3 p-3 mb-5 rounded">
         <div class="card-body">
             <h2 class="card-text">
                 3. Détermine si l’IP appartient au réseau
@@ -98,14 +100,12 @@
             <small id="inputQ3Help3" class="form-text text-muted">Exemple d'adresse de réseau : 192.168.16.0</small>
         </div>
         </div>
-        <button type="button" class="btn btn-primary" onclick="question3()">Valider</button>
+        <button type="button" class="btn btn-valider" onclick="question3()">Valider</button>
     </form>
-    <!--<label>Adresse IP : <input class="inputQ3" type="text"></label>
-    <label>Masque : <input class="inputQ3" type="text"></label>
-    <label>Adresse de réseau : <input class="inputQ3" type="text"> <button onclick="question3()">Valider</button></label>-->
     <div class="card answerQ3 alert"></div>
 
-    <div class="card text-white bg-dark mb-3 mb-3 shadow p-3 mb-5 rounded">
+    <!--Question 4-->
+    <div class="card titleCardColor mb-3 p-3 mb-5 rounded">
         <div class="card-body">
             <h2 class="card-text">
                 4. Détermine si l’IP peut être attribuée aux machines de ce réseau
@@ -132,14 +132,12 @@
             <small id="inputQ4Help3" class="form-text text-muted">Exemple d'adresse de réseau : 192.168.16.0</small>
         </div>
         </div>
-        <button type="button" class="btn btn-primary" onclick="question4()">Valider</button>
+        <button type="button" class="btn btn-valider" onclick="question4()">Valider</button>
     </form>
-    <!--<label>Adresse IP : <input class="inputQ4" type="text"></label>
-    <label>Masque : <input class="inputQ4" type="text"></label>
-    <label>Adresse de réseau : <input class="inputQ4" type="text"> <button onclick="question4()">Valider</button></label>-->
     <div class="card answerQ4 alert"></div>
 
-    <div class="card text-white bg-dark mb-3 mb-3 shadow p-3 mb-5 rounded">
+    <!--Question 5-->
+    <div class="card titleCardColor mb-3 p-3 mb-5 rounded">
         <div class="card-body">
             <h2 class="card-text">
                 5. Détermine si chaque machine considère l’autre comme faisant partie de son réseau ou pas
@@ -171,18 +169,12 @@
             <small id="inputQ5Help4" class="form-text text-muted">Exemple de masque : 255.255.255.0 ou /24</small>
         </div>
         </div>
-        <button type="button" class="btn btn-primary" onclick="question5()">Valider</button>
+        <button type="button" class="btn btn-valider" onclick="question5()">Valider</button>
     </form>
-    <!--<label>Adresse IP 1 : <input class="inputQ5" type="text"></label>
-    <label>Masque 1 : <input class="inputQ5" type="text"></label>
-    <br/>
-    <label>Adresse IP 2 : <input class="inputQ5" type="text"></label>
-    <label>Masque 2 : <input class="inputQ5" type="text"> <button onclick="question5()">Valider</button></label>-->
     <div class="card answerQ5 alert"></div>
 
     <script src="./app.js"></script>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 </body>
 </html>
