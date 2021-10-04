@@ -49,3 +49,7 @@ body {
     background: linear-gradient(to right top, #FFD0BE 0%, #CE8568 100%);
     box-shadow: 3px 3px 3px #CE8568;
 }
+
+.hide {
+    display: none;
+}
