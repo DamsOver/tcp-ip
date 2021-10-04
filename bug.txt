@@ -1,1 +1,3 @@
--
+-Les champs vides font une bonne réponse alors qu'ils devraient provoquer une erreur
+-checker l'input de lettres partout
+-messages d'erreur sur l'ip invalide est en anglais
