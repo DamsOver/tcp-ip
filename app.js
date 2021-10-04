@@ -243,12 +243,26 @@ function question1() {
     question1_Operations(ip);
 }
 function question1_Operations(ip) {
-    if( !Ip.isValidIp(ip.ipAddress) ) { console.log("Invalid IP !"); return; }
+    if ( document.getElementsByClassName("answerQ1")[0].classList.contains('alert-warning') ){
+        document.getElementsByClassName("answerQ1")[0].classList.remove('alert-warning');
+    }
+    if ( document.getElementsByClassName("answerQ1")[0].classList.contains('alert-success') ){
+        document.getElementsByClassName("answerQ1")[0].classList.remove('alert-success');
+    }
+
+    if( !Ip.isValidIp(ip.ipAddress) ) {
+        console.log("Invalid IP !");
+        document.getElementsByClassName("answerQ1")[0].classList.add('alert-warning');
+        document.getElementsByClassName("answerQ1")[0].textContent="Invalid IP !";
+        return; }
     let classIp = ip.getClassOfIpClassfull();
     let nbNetwork = ip.getNbNetworkOfClass();
     let nbHost = ip.getNbHostOfClass();
     let reponse = "Classe : "+classIp+", Network : "+nbNetwork+", Host : "+nbHost;
     console.log("Question 1 : "+reponse);
+    document.getElementsByClassName("answerQ1")[0].classList.add('alert-success')
+    document.getElementsByClassName("answerQ1")[0].textContent=reponse;
+
 }
 function question2() {
     let ipMaskInputTxt = document.getElementsByClassName("inputQ2");
@@ -258,7 +272,18 @@ function question2() {
     question2_Operations(ip,mask,isClassful);
 }
 function question2_Operations(ip,mask,isClassful) {
-    if( !Mask.isValidMask(mask) ) { console.log("Invalid Mask !"); return; }
+    if ( document.getElementsByClassName("answerQ2")[0].classList.contains('alert-warning') ){
+        document.getElementsByClassName("answerQ2")[0].classList.remove('alert-warning');
+    }
+    if ( document.getElementsByClassName("answerQ2")[0].classList.contains('alert-success') ){
+        document.getElementsByClassName("answerQ2")[0].classList.remove('alert-success');
+    }
+    if( !Mask.isValidMask(mask) ) {
+        console.log("Invalid Mask !");
+        document.getElementsByClassName("answerQ2")[0].classList.add('alert-warning');
+        document.getElementsByClassName("answerQ2")[0].textContent="Invalid Mask !";
+        return;
+    }
     let network = new Network(ip,mask);
     let classLetter = network.ip.getClassOfIpClassfull();
     let networkAddress = network.getNetworkAddress();
@@ -282,6 +307,9 @@ function question2_Operations(ip,mask,isClassful) {
     }
 
     console.log("Question 2 : "+answer);
+    document.getElementsByClassName("answerQ2")[0].classList.add('alert-success')
+    document.getElementsByClassName("answerQ2")[0].textContent=answer;
+
 }
 function question3() {
     let ipMaskNetworkInputTxt = document.getElementsByClassName("inputQ3");
@@ -291,9 +319,18 @@ function question3() {
     question3_Operations(ip,mask,networkAddress);
 }
 function question3_Operations(ip,mask,networkAddress) {
+    if ( document.getElementsByClassName("answerQ3")[0].classList.contains('alert-warning') ){
+        document.getElementsByClassName("answerQ3")[0].classList.remove('alert-warning');
+    }
+    if ( document.getElementsByClassName("answerQ3")[0].classList.contains('alert-success') ){
+        document.getElementsByClassName("answerQ3")[0].classList.remove('alert-success');
+    }
     let network = new Network(ip,mask);
     let answer = ( network.isIpPartOfNetwork(networkAddress) ) ? "L'adresse IP appartient au réseau" : "L'adresse IP n'appartient pas au réseau";
     console.log("Question 3 : "+answer);
+    document.getElementsByClassName("answerQ3")[0].classList.add('alert-success')
+    document.getElementsByClassName("answerQ3")[0].textContent=answer;
+
 }
 function question4() {
     let ipMaskNetworkInputTxt = document.getElementsByClassName("inputQ4");
@@ -303,9 +340,18 @@ function question4() {
     question4_Operations(ip,mask,networkAddress);
 }
 function question4_Operations(ip,mask,networkAddress) {
+    if ( document.getElementsByClassName("answerQ4")[0].classList.contains('alert-warning') ){
+        document.getElementsByClassName("answerQ4")[0].classList.remove('alert-warning');
+    }
+    if ( document.getElementsByClassName("answerQ4")[0].classList.contains('alert-success') ){
+        document.getElementsByClassName("answerQ4")[0].classList.remove('alert-success');
+    }
     let network = new Network(ip,mask);
     let answer =  (network.isValidIpForThisNetwork(networkAddress)) ? "L'adresse IP peut être attribuée aux machines de ce réseau" : "L'adresse IP ne peut pas être attribuée aux machines de ce réseau";
     console.log("Question 4 : "+answer);
+    document.getElementsByClassName("answerQ4")[0].classList.add('alert-success')
+    document.getElementsByClassName("answerQ4")[0].textContent=answer;
+
 }
 function question5() {
     let ipMaskInputTxt = document.getElementsByClassName("inputQ5");
@@ -316,8 +362,17 @@ function question5() {
     question5_Operations(ip1,mask1,ip2,mask2);
 }
 function question5_Operations(ip1,mask1,ip2,mask2) {
+    if ( document.getElementsByClassName("answerQ5")[0].classList.contains('alert-warning') ){
+        document.getElementsByClassName("answerQ5")[0].classList.remove('alert-warning');
+    }
+    if ( document.getElementsByClassName("answerQ5")[0].classList.contains('alert-success') ){
+        document.getElementsByClassName("answerQ5")[0].classList.remove('alert-success');
+    }
     let network1 = new Network(ip1,mask1);
     let network2 = new Network(ip2,mask2);
     let answer=(network1.isSameNetwork(network2))?"Les 2 machines font parties du même réseau":"Les 2 machines ne font pas parties du même réseau";
     console.log("Question 5 : "+answer);
+    document.getElementsByClassName("answerQ5")[0].classList.add('alert-success')
+    document.getElementsByClassName("answerQ5")[0].textContent=answer;
+
 }
