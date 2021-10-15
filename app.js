@@ -1,10 +1,4 @@
-// Work in progress...
-
-/**
- * @author Auversack Damien
- * @date 04-10-2021
- */
-
+// Regex vérifiant la validité d'une Ip
 let regexIP = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 class Ip {
     ipAddress;
@@ -14,9 +8,11 @@ class Ip {
     setIp(ip) {
         this.ipAddress = ip;
     }
+    // Vérifie si l'ip est valide d'après un regex
     static isValidIp(ip) {
         return regexIP.test(ip);
     }
+    // Récupère la classe d'une ip en classfull
     getClassOfIpClassfull() {
         const ipArray = this.ipAddress.split('.');
         let firstByteBinary = parseInt(ipArray[0], 10).toString(2).padStart(8, "0");
@@ -33,6 +29,7 @@ class Ip {
         }
         return "E";
     }
+    // Récupère le nombre de réseaux d'une classe spécifique (mode classfull)
     getNbNetworkOfClass() {
         const classLetter = this.getClassOfIpClassfull();
         switch(classLetter) {
@@ -44,6 +41,7 @@ class Ip {
             default: return -3;
         }
     }
+    // Récupère le nombre d'hotes d'une classe spécifique (mode classfull)
     getNbHostOfClass() {
         const classLetter = this.getClassOfIpClassfull();
         switch(classLetter) {
@@ -62,9 +60,11 @@ class Mask {
     constructor(mask="") {
         this.setMask(mask);
     }
+    // Stoque toujours le masque en version classic et non CIDR
     setMask(mask) {
         this.maskAddress = Mask.isCidrMask(mask) ? Mask.convertMaskCidrToClassic(mask) : mask;
     }
+    // Inverse les bits d'un masque
     reverseMask() {
         let maskArray = Network.convertIpMaskDecimalToBinary(this.maskAddress);
         maskArray = Network.convertIpMaskArrayToString(maskArray).replace(/\./g, '');
@@ -74,6 +74,7 @@ class Mask {
         }
         return Network.convertIpMaskBinaryToDecimal( Network.splitStringIntoPartOfNCharacter(tmpArray.join(''),8) );
     }
+    // Vérifie si le masque est valide d'après le regex de l'ip + CIDR
     static isValidMask(mask) {
         let regex;
         if(Mask.isCidrMask(mask)) {
@@ -84,15 +85,18 @@ class Mask {
         }
         return regex.test(mask);
     }
+    // Vérifie si le masque est en notation CIDR
     static isCidrMask(mask) {
         return mask.charAt(0)==='/';
     }
+    // Converti un masque CIDR en masque classic
     static convertMaskCidrToClassic(maskCidr) {
         maskCidr = maskCidr.replace(/^\//, "");
         let tmpMask = ''.padStart(maskCidr, "1").padEnd(32, "0");
         let maskClassic = Network.splitStringIntoPartOfNCharacter(tmpMask,8);
         return Network.convertIpMaskArrayToString( Network.convertIpMaskBinaryToDecimal(maskClassic) );
     }
+    // Converti un masque classic en masque CIDR
     static convertMaskClassicToCidr(maskClassic) {
         let MaskArray = (!Array.isArray(maskClassic)) ? Network.convertIpMaskStringToArray(maskClassic) : maskClassic;
         let cidr = 0;
@@ -102,6 +106,7 @@ class Mask {
         }
         return cidr;
     }
+    // Récupère le masque d'une classe d'ip (mode classfull)
     static getMaskOfClassful(classLetter) {
         switch(classLetter) {
             case 'A': return "255.0.0.0";
@@ -121,12 +126,16 @@ class Network {
         this.ip = new Ip(ip);
         this.mask = new Mask(mask);
     }
+    // Récupère l'adresse réseau d'une IP à l'aide de son masque
     getNetworkAddress() {
         return this.andOrOperationIpMask(true).join(".");
     }
+    // Récupère l'adresse de broadcast d'une IP à l'aide de son masque
     getBroadcastAddress() {
         return this.andOrOperationIpMask(false).join(".");
     }
+    // Si "isAndOperation" vaut true alors : Effectue un ET logique entre une IP et son masque
+    // Si "isAndOperation" vaut false alors : Effectue un OU logique entre une IP et son masque
     andOrOperationIpMask(isAndOperation) {
         let ip = this.ip.ipAddress;
         let mask = (isAndOperation) ? this.mask.maskAddress : this.mask.reverseMask();
@@ -138,6 +147,7 @@ class Network {
         }
         return tmpArray;
     }
+    // Récupère l'adresse de sous-réseau ainsi que l'adresse de broadcast du réseau dans le cas où un sous-réseau existe
     getSubnetworkAddress(mask, isForBroadcast) {
         let networkAddress = this.getNetworkAddress();
         networkAddress = Network.convertIpMaskStringToArray(networkAddress);
@@ -163,14 +173,17 @@ class Network {
             default: return -3;
         }
     }
+    // Vérifie si 2 IP font partient du même réseau
     isSameNetwork(network2) {
         let network1 = new Network(this.ip.ipAddress,this.mask.maskAddress);
         return network1.getNetworkAddress() === network2.getNetworkAddress();
     }
+    // Vérifie si une Ip faut partie d'un adresse réseau
     isIpPartOfNetwork(networkAddress) {
         let network2 = new Network(networkAddress,"/32");
         return this.isSameNetwork(network2);
     }
+    // Vérifie si une Ip peut être attribuée aux machines de ce réseau
     isValidIpForThisNetwork(networkAddress) {
         let network2 = new Network(networkAddress,"/32");
 
@@ -179,6 +192,7 @@ class Network {
 
         return this.isSameNetwork(network2) && isNotNetworkAddressAnd && isNotBroadcastAddress;
     }
+    // En mode classfull, vérifie si une ip possède un sous-réseau
     isThereSubnetwork(classLetter) {
         let maskOfClassLetter = Mask.getMaskOfClassful(classLetter);
         let maskOfNetwork = this.mask.maskAddress;
@@ -188,6 +202,7 @@ class Network {
 
         return nbOneInMask2>nbOneInMask1;
     }
+    // converti une ip ou un masque décimal en binaire
     static convertIpMaskDecimalToBinary(ipOrMask) {
         let ipOrMaskArray = (!Array.isArray(ipOrMask)) ? Network.convertIpMaskStringToArray(ipOrMask) : ipOrMask;
         let ipOrMaskArrayBinary=[];
@@ -196,6 +211,7 @@ class Network {
         }
         return ipOrMaskArrayBinary;
     }
+    // converti une ip ou un masque binaire en décimal
     static convertIpMaskBinaryToDecimal(ipOrMask) {
         let ipOrMaskArray=(!Array.isArray(ipOrMask)) ? Network.convertIpMaskStringToArray(ipOrMask) : ipOrMask;
         let ipOrMaskArrayDecimal=[];
@@ -204,6 +220,7 @@ class Network {
         }
         return ipOrMaskArrayDecimal;
     }
+    // converti une ip ou un masque de type string en array
     static convertIpMaskStringToArray(ipOrMask) {
         const ipOrMaskArray = (!Array.isArray(ipOrMask)) ? ipOrMask.split('.') : ipOrMask;
         let ipOrMaskArrayBinary=[];
@@ -212,13 +229,16 @@ class Network {
         }
         return ipOrMaskArrayBinary;
     }
+    // converti une ip ou un masque de type array en string
     static convertIpMaskArrayToString(array) {
         return (Array.isArray(array)) ? array.join('.') : array;
     }
+    // Divise un string en part de n caractères
     static splitStringIntoPartOfNCharacter(str, n) {
         let regex = new RegExp(".{1,"+n+"}","g");
         return str.match(regex);
     }
+    // Calcule le pas d'un réseau
     static calculateTheStep(mask) {
         if(Mask.isCidrMask(mask)) {
             mask = Mask.convertMaskCidrToClassic(mask)
@@ -237,11 +257,13 @@ class Network {
 
 }
 
+// Récupère les inputs de la question 1
 function question1() {
     let ipInputTxt = document.getElementsByClassName("inputQ1")[0].value;
     let ip = new Ip(ipInputTxt);
     question1_Operations(ip);
 }
+// Logique de la question 1
 function question1_Operations(ip) {
     if ( document.getElementsByClassName("answerQ1")[0].classList.contains('alert-warning') ){
         document.getElementsByClassName("answerQ1")[0].classList.remove('alert-warning');
@@ -264,6 +286,8 @@ function question1_Operations(ip) {
     document.getElementsByClassName("answerQ1")[0].textContent=reponse;
 
 }
+
+// Récupère les inputs de la question 2
 function question2() {
     let ipMaskInputTxt = document.getElementsByClassName("inputQ2");
     let ip = ipMaskInputTxt[0].value;
@@ -271,6 +295,7 @@ function question2() {
     let isClassful = ipMaskInputTxt[2].checked;
     question2_Operations(ip,mask,isClassful);
 }
+// Logique de la question 2
 function question2_Operations(ip,mask,isClassful) {
     if ( document.getElementsByClassName("answerQ2")[0].classList.contains('alert-warning') ){
         document.getElementsByClassName("answerQ2")[0].classList.remove('alert-warning');
@@ -311,6 +336,8 @@ function question2_Operations(ip,mask,isClassful) {
     document.getElementsByClassName("answerQ2")[0].textContent=answer;
 
 }
+
+// Récupère les inputs de la question 3
 function question3() {
     let ipMaskNetworkInputTxt = document.getElementsByClassName("inputQ3");
     let ip = ipMaskNetworkInputTxt[0].value;
@@ -318,6 +345,7 @@ function question3() {
     let networkAddress = ipMaskNetworkInputTxt[2].value;
     question3_Operations(ip,mask,networkAddress);
 }
+// Logique de la question 3
 function question3_Operations(ip,mask,networkAddress) {
     if ( document.getElementsByClassName("answerQ3")[0].classList.contains('alert-warning') ){
         document.getElementsByClassName("answerQ3")[0].classList.remove('alert-warning');
@@ -338,6 +366,8 @@ function question3_Operations(ip,mask,networkAddress) {
     document.getElementsByClassName("answerQ3")[0].textContent=answer;
 
 }
+
+// Récupère les inputs de la question 4
 function question4() {
     let ipMaskNetworkInputTxt = document.getElementsByClassName("inputQ4");
     let ip = ipMaskNetworkInputTxt[0].value;
@@ -345,6 +375,7 @@ function question4() {
     let networkAddress = ipMaskNetworkInputTxt[2].value;
     question4_Operations(ip,mask,networkAddress);
 }
+// Logique de la question 4
 function question4_Operations(ip,mask,networkAddress) {
     if ( document.getElementsByClassName("answerQ4")[0].classList.contains('alert-warning') ){
         document.getElementsByClassName("answerQ4")[0].classList.remove('alert-warning');
@@ -365,6 +396,8 @@ function question4_Operations(ip,mask,networkAddress) {
     document.getElementsByClassName("answerQ4")[0].textContent=answer;
 
 }
+
+// Récupère les inputs de la question 5
 function question5() {
     let ipMaskInputTxt = document.getElementsByClassName("inputQ5");
     let ip1 = ipMaskInputTxt[0].value;
@@ -373,6 +406,7 @@ function question5() {
     let mask2 = ipMaskInputTxt[3].value;
     question5_Operations(ip1,mask1,ip2,mask2);
 }
+// Logique de la question 5
 function question5_Operations(ip1,mask1,ip2,mask2) {
     if ( document.getElementsByClassName("answerQ5")[0].classList.contains('alert-warning') ){
         document.getElementsByClassName("answerQ5")[0].classList.remove('alert-warning');
