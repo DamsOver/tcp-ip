@@ -1,3 +1,6 @@
 -Les champs vides font une bonne réponse alors qu'ils devraient provoquer une erreur
 -checker l'input de lettres partout
 -messages d'erreur sur l'ip invalide est en anglais
+-Fonction 2 : les adresses ip ne sont pas vérifiées (ex: 256.256.256.256 est correct dans le programme mais pas en réalité)
+-Fonction 2 : le masque acceptent 0.0.0.0 ainsi que /32. Le masque ne vérifie quel nombre est entré (faut vérifier en binaire)
+-Fonction 2 : 255.255.127.0 est valide lorsque classful est coché mais pas l'inverse
