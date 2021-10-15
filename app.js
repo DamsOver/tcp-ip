@@ -307,7 +307,7 @@ function question2_Operations(ip,mask,isClassful) {
 
     removeAlertIfContains(answerQ2);
 
-    if( !Mask.isValidMask(mask) || !Ip.isValidIp(ip)) {
+    if(!Mask.isValidMask(mask) || !Ip.isValidIp(ip)) {
         console.log("Invalid Mask or IP !");
         answerQ2.classList.add('alert-warning');
         answerQ2.textContent="Invalid Mask or IP !";
