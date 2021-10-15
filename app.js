@@ -143,7 +143,8 @@ class Network {
         let maskArray = (!Array.isArray(mask)) ? Network.convertIpMaskStringToArray(mask) : mask;
         let tmpArray = [];
         for (let i = 0; i < ipArray.length; i++) {
-            tmpArray.push( (isAndOperation) ? (ipArray[i]&maskArray[i]).toString() : (ipArray[i]|maskArray[i]).toString() );
+            tmpArray.push( (isAndOperation)
+                ? (ipArray[i]&maskArray[i]).toString() : (ipArray[i]|maskArray[i]).toString() );
         }
         return tmpArray;
     }
@@ -338,7 +339,9 @@ function question2_Operations(ip,mask,isClassful) {
 
     if(isClassful) {
         answer = "Adresse de réseau : "+networkAddressClassful+", Adresse de broadcast : ";
-        answer += (network.isThereSubnetwork(classLetter)) ? broadcastAddressClassfulWithsubnetwork+", Adresse de sous-réseau : "+ subnetworkAddress : broadcastAddressClassful;
+        answer += (network.isThereSubnetwork(classLetter))
+            ? broadcastAddressClassfulWithsubnetwork+", Adresse de sous-réseau : " + subnetworkAddress
+            : broadcastAddressClassful;
     } else {
         answer = "Adresse de réseau : "+networkAddress+", Adresse de broadcast : "+broadcastAddress;
     }
@@ -369,7 +372,8 @@ function question3_Operations(ip,mask,networkAddress) {
     }
 
     let network = new Network(ip,mask);
-    let answer = ( network.isIpPartOfNetwork(networkAddress) ) ? "L'adresse IP appartient au réseau" : "L'adresse IP n'appartient pas au réseau";
+    let answer = ( network.isIpPartOfNetwork(networkAddress) )
+        ? "L'adresse IP appartient au réseau" : "L'adresse IP n'appartient pas au réseau";
     console.log("Question 3 : "+answer);
     answerQ3.classList.add('alert-success')
     answerQ3.textContent=answer;
@@ -395,7 +399,9 @@ function question4_Operations(ip,mask,networkAddress) {
     }
 
     let network = new Network(ip,mask);
-    let answer =  (network.isValidIpForThisNetwork(networkAddress)) ? "L'adresse IP peut être attribuée aux machines de ce réseau" : "L'adresse IP ne peut pas être attribuée aux machines de ce réseau";
+    let answer =  (network.isValidIpForThisNetwork(networkAddress))
+        ? "L'adresse IP peut être attribuée aux machines de ce réseau"
+        : "L'adresse IP ne peut pas être attribuée aux machines de ce réseau";
     console.log("Question 4 : "+answer);
     answerQ4.classList.add('alert-success')
     answerQ4.textContent=answer;
@@ -424,7 +430,8 @@ function question5_Operations(ip1,mask1,ip2,mask2) {
 
     let network1 = new Network(ip1,mask1);
     let network2 = new Network(ip2,mask2);
-    let answer=(network1.isSameNetwork(network2))?"Les 2 machines font parties du même réseau":"Les 2 machines ne font pas parties du même réseau";
+    let answer=(network1.isSameNetwork(network2))
+        ?"Les 2 machines font parties du même réseau":"Les 2 machines ne font pas parties du même réseau";
     console.log("Question 5 : "+answer);
     answerQ5.classList.add('alert-success')
     answerQ5.textContent=answer;
