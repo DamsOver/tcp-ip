@@ -1,10 +1,14 @@
 -Les champs vides font une bonne réponse alors qu'ils devraient provoquer une erreur
 -checker l'input de lettres partout
--messages d'erreur sur l'ip invalide est en anglais
--Fonction 2 : les adresses ip ne sont pas vérifiées (ex: 256.256.256.256 est correct dans le programme mais pas en réalité)
 -Fonction 2 : le masque acceptent 0.0.0.0 ainsi que /32. Le masque ne vérifie quel nombre est entré (faut vérifier en binaire)
 -Fonction 2 : 255.255.127.0 est valide lorsque classful est coché mais pas l'inverse
 -Fonction 3 : aucune vérification sur l'adresse de réseau
 -Fonction 2 : Le bouton classful doit être coché ou non et doit refuser les entrées qui ne fonctionnent pas
 -Fonctions : vérifier toutes les données entrées dans tous les champs
 -Maybe gestion des cas de l'adresse réseau et broadcast dans la question 5 (est-ce qu'ils sont considérés comme des machines ou non)
+
+#to do
+-fonction de vérification pour l'adresse de réseau (j'ai utilisé la fonction de vérification de l'ip)
+-vérification sur le bouton classful
+-vérifier les champs vides (c'est bon)
+-limites du masque à revoir (fait pour la notation CIDR mais pas pour le cas de 0.0.0.0)

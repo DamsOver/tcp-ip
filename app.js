@@ -78,7 +78,7 @@ class Mask {
         let regex;
         if(Mask.isCidrMask(mask)) {
             mask = mask.replace(/^\//, "");
-            regex = /^([1-9]|[1-2][0-9]|3[0-2])$/;
+            regex = /^([1-9]|[1-2][0-9]|30)$/;
         } else {
             regex = regexIP;
         }
@@ -278,10 +278,10 @@ function question2_Operations(ip,mask,isClassful) {
     if ( document.getElementsByClassName("answerQ2")[0].classList.contains('alert-success') ){
         document.getElementsByClassName("answerQ2")[0].classList.remove('alert-success');
     }
-    if( !Mask.isValidMask(mask) ) {
-        console.log("Invalid Mask !");
+    if( !Mask.isValidMask(mask) | !Ip.isValidIp(ip)) {
+        console.log("Invalid Mask or IP !");
         document.getElementsByClassName("answerQ2")[0].classList.add('alert-warning');
-        document.getElementsByClassName("answerQ2")[0].textContent="Invalid Mask !";
+        document.getElementsByClassName("answerQ2")[0].textContent="Invalid Mask or IP !";
         return;
     }
     let network = new Network(ip,mask);
@@ -325,6 +325,12 @@ function question3_Operations(ip,mask,networkAddress) {
     if ( document.getElementsByClassName("answerQ3")[0].classList.contains('alert-success') ){
         document.getElementsByClassName("answerQ3")[0].classList.remove('alert-success');
     }
+    if( !Mask.isValidMask(mask) | !Ip.isValidIp(ip) | !Ip.isValidIp(networkAddress)) {
+        console.log("Invalid Mask or IP !");
+        document.getElementsByClassName("answerQ3")[0].classList.add('alert-warning');
+        document.getElementsByClassName("answerQ3")[0].textContent="Invalid Mask or IP !";
+        return;
+    }
     let network = new Network(ip,mask);
     let answer = ( network.isIpPartOfNetwork(networkAddress) ) ? "L'adresse IP appartient au réseau" : "L'adresse IP n'appartient pas au réseau";
     console.log("Question 3 : "+answer);
@@ -345,6 +351,12 @@ function question4_Operations(ip,mask,networkAddress) {
     }
     if ( document.getElementsByClassName("answerQ4")[0].classList.contains('alert-success') ){
         document.getElementsByClassName("answerQ4")[0].classList.remove('alert-success');
+    }
+    if( !Mask.isValidMask(mask) | !Ip.isValidIp(ip) | !Ip.isValidIp(networkAddress)) {
+        console.log("Invalid Mask or IP !");
+        document.getElementsByClassName("answerQ4")[0].classList.add('alert-warning');
+        document.getElementsByClassName("answerQ4")[0].textContent="Invalid Mask, IP or Network adress !";
+        return;
     }
     let network = new Network(ip,mask);
     let answer =  (network.isValidIpForThisNetwork(networkAddress)) ? "L'adresse IP peut être attribuée aux machines de ce réseau" : "L'adresse IP ne peut pas être attribuée aux machines de ce réseau";
@@ -367,6 +379,12 @@ function question5_Operations(ip1,mask1,ip2,mask2) {
     }
     if ( document.getElementsByClassName("answerQ5")[0].classList.contains('alert-success') ){
         document.getElementsByClassName("answerQ5")[0].classList.remove('alert-success');
+    }
+    if( !Mask.isValidMask(mask1) | !Ip.isValidIp(ip1) | !Mask.isValidMask(mask2) | !Ip.isValidIp(ip2)) {
+        console.log("Invalid Mask or IP !");
+        document.getElementsByClassName("answerQ5")[0].classList.add('alert-warning');
+        document.getElementsByClassName("answerQ5")[0].textContent="Invalid Mask or IP !";
+        return;
     }
     let network1 = new Network(ip1,mask1);
     let network2 = new Network(ip2,mask2);
