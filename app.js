@@ -79,7 +79,7 @@ class Mask {
         let regex;
         if(Mask.isCidrMask(mask)) {
             mask = mask.replace(/^\//, "");
-            regex = /^([1-9]|[1-2][0-9]|30)$/;
+            regex = /^([1-9]|[1-2][0-9]|32)$/;
         } else {
             regex = regexIP;
         }
