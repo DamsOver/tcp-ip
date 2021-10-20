@@ -176,24 +176,25 @@ class Network {
         return tmpArray;
     }
     // Récupère l'adresse de sous-réseau ainsi que l'adresse de broadcast du réseau dans le cas où un sous-réseau existe
-    getSubnetworkAddress(mask, isForBroadcast) {
+    getSubnetworkAddress(mask, isForBroadcast, isForActualSubnet) {
         let networkAddress = this.getNetworkAddress();
         networkAddress = Network.convertIpMaskStringToArray(networkAddress);
         let step = (isForBroadcast) ? Network.calculateTheStep(mask)-1 : Network.calculateTheStep(mask);
+
         let tmpNetworkAddress;
         let classLetter = this.ip.getClassOfIpClassfull();
 
         switch(classLetter) {
             case 'A':
-                tmpNetworkAddress = parseInt(networkAddress[1]) + step;
+                tmpNetworkAddress = (isForActualSubnet) ? parseInt(networkAddress[1]) : parseInt(networkAddress[1]) + step;
                 networkAddress[1] = tmpNetworkAddress.toString();
                 return Network.convertIpMaskArrayToString(networkAddress);
             case 'B':
-                tmpNetworkAddress = parseInt(networkAddress[2]) + step;
+                tmpNetworkAddress = (isForActualSubnet) ? parseInt(networkAddress[2]) : parseInt(networkAddress[2]) + step;
                 networkAddress[2] = tmpNetworkAddress.toString();
                 return Network.convertIpMaskArrayToString(networkAddress);
             case 'C':
-                tmpNetworkAddress = parseInt(networkAddress[3]) + step;
+                tmpNetworkAddress = (isForActualSubnet) ? parseInt(networkAddress[3]) : parseInt(networkAddress[3]) + step;
                 networkAddress[3] = tmpNetworkAddress.toString();
                 return Network.convertIpMaskArrayToString(networkAddress);
             case 'D': return -1;
@@ -359,8 +360,8 @@ function question2_Operations(ip,mask,isClassful) {
     let networkAddressClassful = networkClassful.getNetworkAddress();
 
     let broadcastAddressClassful = networkClassful.getBroadcastAddress();
-    let subnetworkAddress = network.getSubnetworkAddress(mask,false);
-    let broadcastAddressClassfulWithsubnetwork = network.getSubnetworkAddress(mask,true);
+    let subnetworkAddress = network.getSubnetworkAddress(mask,false, true);
+    let broadcastAddressClassfulWithsubnetwork = network.getSubnetworkAddress(mask,true, false);
 
     let answer;
 
