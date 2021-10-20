@@ -37,9 +37,9 @@ class Ip {
             case 'A': return 126;
             case 'B': return 16_384;
             case 'C': return 2_097_152;
-            case 'D': return -1;
-            case 'E': return -2;
-            default: return -3;
+            case 'D': return 0;
+            case 'E': return 0;
+            default: return 0;
         }
     }
     // Récupère le nombre d'hotes d'une classe spécifique (mode classfull)
@@ -49,9 +49,9 @@ class Ip {
             case 'A': return 16_777_214;
             case 'B': return 65_534;
             case 'C': return 254;
-            case 'D': return -1;
-            case 'E': return -2;
-            default: return -3;
+            case 'D': return 0;
+            case 'E': return 0;
+            default: return 0;
         }
     }
 }
@@ -80,7 +80,7 @@ class Mask {
         let regex;
         if(Mask.isCidrMask(mask)) {
             mask = mask.replace(/^\//, "");
-            regex = /^([1-9]|[1-2][0-9]|3[0-2])$/;
+            regex = /^([1-9]|[1-2][0-9]|30)$/;
             return regex.test(mask);
         }
         else {
