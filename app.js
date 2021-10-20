@@ -80,10 +80,11 @@ class Mask {
         let regex;
         if(Mask.isCidrMask(mask)) {
             mask = mask.replace(/^\//, "");
-            regex = /^([1-9]|[1-2][0-9]|32)$/;
+            regex = /^([1-9]|[1-2][0-9]|3[0-2])$/;
             return regex.test(mask);
         }
         else {
+
             let isValid = false;
             let currentNumber = 0;
             let isLastNumber = false;
@@ -107,6 +108,7 @@ class Mask {
                 }
                 isValid = false;
             }
+
             return true;
         }
     }
