@@ -66,7 +66,6 @@ class Ip {
             default: return 0;
         }
     }
-
 }
 
 class Mask {
