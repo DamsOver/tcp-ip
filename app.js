@@ -11,6 +11,18 @@ class Ip {
     }
     // Vérifie si l'ip est valide d'après un regex
     static isValidIp(ip) {
+        let ipArray = Network.convertIpMaskStringToArray(ip);
+        if(ipArray[0]==="127") {
+            return false;
+        }
+        switch (ip) {
+            case "0.0.0.0":
+                return false;
+            case "255.255.255.255":
+                return false;
+            default:
+        }
+
         return regexIP.test(ip);
     }
     // Récupère la classe d'une ip en classfull
