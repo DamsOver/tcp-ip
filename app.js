@@ -66,6 +66,7 @@ class Ip {
             default: return 0;
         }
     }
+
 }
 
 class Mask {
@@ -90,6 +91,7 @@ class Mask {
     // Vérifie si le masque est valide d'après le regex de l'ip + CIDR
     static isValidMask(mask) {
         let regex;
+
         if(Mask.isCidrMask(mask)) {
             mask = mask.replace(/^\//, "");
             regex = /^([1-9]|[1-2][0-9]|30)$/;
@@ -152,10 +154,37 @@ class Mask {
             case 'B': return "255.255.0.0";
             case 'C': return "255.255.255.0";
             case 'D': return -1;
-            case 'E': return -2;
+            case 'E': return "/24";
             default: return -3;
         }
     }
+
+    static getClassOfCidrMask(maskCidr) {
+
+        if(!Mask.isValidMask(maskCidr)) {
+            return "-1";
+        }
+
+        if(!Mask.isCidrMask(maskCidr)) {
+            maskCidr = Mask.convertMaskClassicToCidr(maskCidr)
+        }
+
+        maskCidr = maskCidr.replace(/^\//, "");
+
+        let intMaskCidr = parseInt(maskCidr);
+
+        if(intMaskCidr>=0 && intMaskCidr<=7) {
+            return "-1";
+        } else if(intMaskCidr>=8 && intMaskCidr<=15) {
+            return "A";
+        } else if(intMaskCidr>=16 && intMaskCidr<=23) {
+            return "B";
+        } else if(intMaskCidr>=24 && intMaskCidr<=32) {
+            return "C";
+        }
+
+    }
+
 }
 
 class Network {
@@ -213,6 +242,8 @@ class Network {
             case 'E': return -2;
             default: return -3;
         }
+
+
     }
     // Vérifie si 2 IP font partient du même réseau
     isSameNetwork(network2) {
@@ -296,6 +327,13 @@ class Network {
         return 1;
     }
 
+    static isValidLetterIpMaskClassful(letterIp, letterMask) {
+        if(letterMask<letterIp) {
+            return false;
+        }
+        return true;
+    }
+
 }
 
 function removeAlertIfContains(answerQuestion) {
@@ -309,7 +347,6 @@ function removeAlertIfContains(answerQuestion) {
 
 function isNotValidQuestion(condition, answerQuestion, message) {
     if( condition ) {
-        console.log(message);
         answerQuestion.classList.add('alert-warning');
         answerQuestion.textContent=message;
         return true;
@@ -337,10 +374,10 @@ function question1_Operations(ip) {
     let classIp = ip.getClassOfIpClassfull();
     let nbNetwork = ip.getNbNetworkOfClass();
     let nbHost = ip.getNbHostOfClass();
-    let reponse = "Classe : "+classIp+", Network : "+nbNetwork+", Host : "+nbHost;
-    console.log("Question 1 : "+reponse);
+    let answer = "Classe : "+classIp+", Network : "+nbNetwork+", Host : "+nbHost;
+    console.log("Question 1 : "+answer);
     answerQ1.classList.add('alert-success')
-    answerQ1.textContent=reponse;
+    answerQ1.textContent=answer;
 }
 
 // Récupère les inputs de la question 2
@@ -367,17 +404,26 @@ function question2_Operations(ip,mask,isClassful) {
     let networkAddress = network.getNetworkAddress();
     let broadcastAddress = network.getBroadcastAddress();
 
-    let maskClassful = Mask.getMaskOfClassful(classLetter);
-    let networkClassful = new Network(ip,maskClassful);
-    let networkAddressClassful = networkClassful.getNetworkAddress();
-
-    let broadcastAddressClassful = networkClassful.getBroadcastAddress();
-    let subnetworkAddress = network.getSubnetworkAddress(mask,false, true);
-    let broadcastAddressClassfulWithsubnetwork = network.getSubnetworkAddress(mask,true, false);
-
     let answer;
 
     if(isClassful) {
+
+        let maskClassful = Mask.getMaskOfClassful(classLetter);
+        let networkClassful = new Network(ip,maskClassful);
+        let networkAddressClassful = networkClassful.getNetworkAddress();
+
+        let broadcastAddressClassful = networkClassful.getBroadcastAddress();
+        let subnetworkAddress = network.getSubnetworkAddress(mask,false, true);
+        let broadcastAddressClassfulWithsubnetwork = network.getSubnetworkAddress(mask,true, false);
+
+        let letterOfIpClassFull = (new Ip(ip)).getClassOfIpClassfull()
+        let letterOfMaskClassFull = Mask.getClassOfCidrMask(mask);
+
+        let condition2 = Network.isValidLetterIpMaskClassful(letterOfIpClassFull, letterOfMaskClassFull);
+        if(isNotValidQuestion(!condition2, answerQ2,"Erreur dans le masque ou l'IP !" )) {
+            return;
+        }
+
         answer = "Adresse de réseau : "+networkAddressClassful+", Adresse de broadcast : ";
         answer += (network.isThereSubnetwork(classLetter))
             ? broadcastAddressClassfulWithsubnetwork+", Adresse de sous-réseau : " + subnetworkAddress
