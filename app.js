@@ -328,10 +328,7 @@ class Network {
     }
 
     static isValidLetterIpMaskClassful(letterIp, letterMask) {
-        if(letterMask<letterIp) {
-            return false;
-        }
-        return true;
+        return letterMask<letterIp;
     }
 
 }
