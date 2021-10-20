@@ -167,8 +167,11 @@ class Mask {
         if(!Mask.isCidrMask(maskCidr)) {
             maskCidr = Mask.convertMaskClassicToCidr(maskCidr)
         }
+        maskCidr = maskCidr.toString();
 
-        maskCidr = maskCidr.replace(/^\//, "");
+        if(maskCidr.charAt(0)==='/') {
+            maskCidr = maskCidr.replace(/^\//, "");
+        }
 
         let intMaskCidr = parseInt(maskCidr);
 
@@ -327,7 +330,7 @@ class Network {
     }
 
     static isValidLetterIpMaskClassful(letterIp, letterMask) {
-        return letterMask<letterIp;
+        return letterMask>=letterIp;
     }
 
 }
@@ -417,6 +420,7 @@ function question2_Operations(ip,mask,isClassful) {
 
         let condition2 = Network.isValidLetterIpMaskClassful(letterOfIpClassFull, letterOfMaskClassFull);
         if(isNotValidQuestion(!condition2, answerQ2,"Erreur dans le masque ou l'IP !" )) {
+            console.log("test");
             return;
         }
 
