@@ -1,5 +1,6 @@
 // Regex vérifiant la validité d'une Ip
 let regexIP = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+let validMaskNumbers = [0, 128, 192, 224, 240, 248, 252, 254, 255];
 class Ip {
     ipAddress;
     constructor(ip) {
@@ -80,10 +81,34 @@ class Mask {
         if(Mask.isCidrMask(mask)) {
             mask = mask.replace(/^\//, "");
             regex = /^([1-9]|[1-2][0-9]|32)$/;
-        } else {
-            regex = regexIP;
+            return regex.test(mask);
         }
-        return regex.test(mask);
+        else {
+            let isValid = false;
+            let currentNumber = 0;
+            let isLastNumber = false;
+            let maskList = mask.split(".");
+            for (let i = 0; i < 4; i++) {
+                for (let j = 0; j < validMaskNumbers.length; j++) {
+                    if (Number(maskList[i]) === validMaskNumbers[j]) {
+                        isValid = true;
+                        currentNumber = validMaskNumbers[j];
+                        if (isLastNumber === true && currentNumber !== 0) {
+                            return false;
+                        }
+                        if (currentNumber !== 255) {
+                            isLastNumber = true;
+                        }
+
+                    }
+                }
+                if(isValid === false){
+                    return false;
+                }
+                isValid = false;
+            }
+            return true;
+        }
     }
     // Vérifie si le masque est en notation CIDR
     static isCidrMask(mask) {
@@ -290,7 +315,7 @@ function question1_Operations(ip) {
     removeAlertIfContains(answerQ1);
 
     let condition = !Ip.isValidIp(ip.ipAddress);
-    if(isNotValidQuestion(condition, answerQ1,"Invalid IP !" )) {
+    if(isNotValidQuestion(condition, answerQ1,"Erreur dans l'IP !" )) {
         return;
     }
 
@@ -318,7 +343,7 @@ function question2_Operations(ip,mask,isClassful) {
     removeAlertIfContains(answerQ2);
 
     let condition = !Mask.isValidMask(mask) || !Ip.isValidIp(ip);
-    if(isNotValidQuestion(condition, answerQ2,"Invalid Mask or IP !" )) {
+    if(isNotValidQuestion(condition, answerQ2,"Erreur dans le masque ou l'IP !" )) {
         return;
     }
 
@@ -367,7 +392,7 @@ function question3_Operations(ip,mask,networkAddress) {
     removeAlertIfContains(answerQ3);
 
     let condition = !Mask.isValidMask(mask) || !Ip.isValidIp(ip) || !Ip.isValidIp(networkAddress);
-    if(isNotValidQuestion(condition, answerQ3,"Invalid Mask or IP !" )) {
+    if(isNotValidQuestion(condition, answerQ3,"Erreur dans le masque, l'IP ou l'adresse de réseau !" )) {
         return;
     }
 
@@ -394,7 +419,7 @@ function question4_Operations(ip,mask,networkAddress) {
     removeAlertIfContains(answerQ4);
 
     let condition = !Mask.isValidMask(mask) || !Ip.isValidIp(ip) || !Ip.isValidIp(networkAddress);
-    if(isNotValidQuestion(condition, answerQ4,"Invalid Mask, IP or Network adress !" )) {
+    if(isNotValidQuestion(condition, answerQ4,"Erreur dans le masque, l'IP ou l'adresse de réseau !" )) {
         return;
     }
 
@@ -424,7 +449,7 @@ function question5_Operations(ip1,mask1,ip2,mask2) {
     removeAlertIfContains(answerQ5);
 
     let condition = !Mask.isValidMask(mask1) || !Ip.isValidIp(ip1) || !Mask.isValidMask(mask2) || !Ip.isValidIp(ip2);
-    if(isNotValidQuestion(condition, answerQ5,"Invalid Mask or IP !" )) {
+    if(isNotValidQuestion(condition, answerQ5,"Erreur dans le masque ou l'IP !" )) {
         return;
     }
 

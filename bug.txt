@@ -1,6 +1,0 @@
--le masque acceptent 0.0.0.0. Le masque ne vérifie quel nombre est entré (faut vérifier en binaire)
--Le bouton classful doit être coché ou non et doit refuser les entrées qui ne fonctionnent pas
-
-#to do
--vérification sur le bouton classful
--limites du masque à revoir (fait pour la notation CIDR mais pas pour le cas de 0.0.0.0)
