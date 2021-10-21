@@ -49,9 +49,9 @@ class Ip {
             case 'A': return 126;
             case 'B': return 16_384;
             case 'C': return 2_097_152;
-            case 'D': return 0;
-            case 'E': return 0;
-            default: return 0;
+            case 'D': return "/";
+            case 'E': return "/";
+            default: return "/";
         }
     }
     // Récupère le nombre d'hotes d'une classe spécifique (mode classfull)
@@ -61,9 +61,9 @@ class Ip {
             case 'A': return 16_777_214;
             case 'B': return 65_534;
             case 'C': return 254;
-            case 'D': return 0;
-            case 'E': return 0;
-            default: return 0;
+            case 'D': return "/";
+            case 'E': return "/";
+            default: return "/";
         }
     }
 }
