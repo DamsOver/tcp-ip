@@ -435,7 +435,7 @@ function question2_Operations(ip,mask,isClassful) {
 
         answer = "Adresse de réseau : "+networkAddressClassful+", Adresse de broadcast : ";
         answer += (network.isThereSubnetwork(classLetter))
-            ? broadcastAddressClassfulWithsubnetwork+", Adresse de sous-réseau : " + subnetworkAddress
+            ? broadcastAddress+", Adresse de sous-réseau : " + subnetworkAddress
             : broadcastAddressClassful;
     } else {
         answer = "Adresse de réseau : "+networkAddress+", Adresse de broadcast : "+broadcastAddress;
