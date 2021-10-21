@@ -91,12 +91,21 @@ class Mask {
     static isValidMask(mask) {
         let regex;
 
+
         if(Mask.isCidrMask(mask)) {
             mask = mask.replace(/^\//, "");
             regex = /^([1-9]|[1-2][0-9]|30)$/;
             return regex.test(mask);
         }
         else {
+
+            switch (mask) {
+                case "0.0.0.0":
+                    return false;
+                case "255.255.255.255":
+                    return false;
+                default:
+            }
 
             let isValid = false;
             let currentNumber = 0;
