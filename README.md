@@ -5,7 +5,7 @@ Technologies : HTML, CSS, JS.
 
 ## Description
 
-Ce projet à pour but de de proposer plusieurs fonctionnalitées en rapport avec les adresse IP.
+Ce projet a pour but de de proposer plusieurs fonctionnalitées en rapport avec les adresses IP.
 
 Liste des fonctionnalitées :
 
