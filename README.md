@@ -21,5 +21,5 @@ Liste des fonctionnalitées :
 
 ## Images de présentation :
 <div>
-<img align=top src="https://github.com/damien-auversack/tcp-ip-labo-1/blob/main/presentation_pictures/picture_01.jpg" width="250px">
+<img align=top src="https://github.com/damien-auversack/tcp-ip-labo-1/blob/main/presentation_pictures/picture_01.jpg" width="800px">
 </div>
