@@ -1,9 +1,11 @@
-# Tcp-ip labo-1 | Projet Scolaire | [FR]
+# IP-Software | Projet Scolaire | [FR]
 ## Informations
 
 Technologies : HTML, CSS, JS.
 
 ## Description
+
+Projet réalisé dans le cadre d'un cours de TCP-IP(Labo-1).
 
 Ce projet a pour but de de proposer plusieurs fonctionnalitées en rapport avec les adresses IP.
 
