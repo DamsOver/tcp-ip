@@ -1,4 +1,4 @@
-# Tcp-ip | Projet Scolaire | [FR]
+# Tcp-ip labo-1 | Projet Scolaire | [FR]
 ## Informations
 
 Technologies : HTML, CSS, JS.
