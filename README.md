@@ -20,3 +20,6 @@ Liste des fonctionnalitées :
 ### Web-Application : https://damien-auversack.github.io/tcp-ip-labo-1/
 
 ## Images de présentation :
+<div>
+<img align=top src="https://github.com/damien-auversack/tcp-ip-labo-1/blob/main/presentation_pictures/picture_01.jpg" width="250px">
+</div>
